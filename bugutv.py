@@ -13,7 +13,7 @@ sever_jiang_send_key = ''    #server酱的send_key,如需微信通知功能，�
 
 data_nonce = ''
 wpnonce = ''
-spaceurl = 'https://www.bugutv.org/user'
+spaceurl = 'https://www.bugutv.vip/user'
 r = httpx.Client(http2=True)
 
 #以下是使用server酱通知的函数（抄来的，哈哈）
@@ -47,12 +47,12 @@ def get_point(spaceurl):
 
 #登录网站，并获取个人空间入口
 def login(uname, upassword):
-    ret = r.get(r'https://www.bugutv.org').text
+    ret = r.get(r'https://www.bugutv.vip').text
     time.sleep(1)
     print("准备登录")
     #进行登录
     data = {'action': "user_login", 'username': uname, 'password': upassword, 'rememberme': 1}
-    ret = r.post('https://www.bugutv.org/wp-admin/admin-ajax.php', data=data).text
+    ret = r.post('https://www.bugutv.vip/wp-admin/admin-ajax.php', data=data).text
     time.sleep(1)
     if '\\u767b\\u5f55\\u6210\\u529f' in ret:
         print('登录成功')
@@ -62,13 +62,13 @@ def login(uname, upassword):
 
 #进行签到
 def qiandao():
-    ret = r.get('https://www.bugutv.org/user').text
+    ret = r.get('https://www.bugutv.vip/user').text
     time.sleep(1)
     data_nonce = re.findall(r'data-nonce="(.*?)" ', ret)[0]
     print('准备签到：获取到签到页 data-nonce: ' + data_nonce )
 
     data = {'action': 'user_qiandao',"nonce":data_nonce}
-    ret = r.post('https://www.bugutv.org/wp-admin/admin-ajax.php', data=data).text
+    ret = r.post('https://www.bugutv.vip/wp-admin/admin-ajax.php', data=data).text
     time.sleep(1)
     if '\\u4eca\\u65e5\\u5df2\\u7b7e\\u5230' in ret:
         print('今日已签到，请明日再来')
@@ -77,7 +77,7 @@ def qiandao():
 
 #退出登录
 def logout():
-    ret = r.get('https://www.bugutv.org/wp-login.php?action=logout&redirect_to=https%3A%2F%2Fwww.bugutv.org&_wpnonce=' + wpnonce).text
+    ret = r.get('https://www.bugutv.vip/wp-login.php?action=logout&redirect_to=https%3A%2F%2Fwww.bugutv.vip&_wpnonce=' + wpnonce).text
     print('退出登录')
 
 
@@ -98,9 +98,9 @@ if __name__ == '__main__':
             #获取签到后的积分数量
             k_num2 = get_point(spaceurl)
 
-            ret = r.get("https://www.bugutv.org/user").text
+            ret = r.get("https://www.bugutv.vip/user").text
 
-            wpnonce = re.findall(r'action=logout&amp;redirect_to=https%3A%2F%2Fwww.bugutv.org&amp;_wpnonce=(.*?)',ret)[0]
+            wpnonce = re.findall(r'action=logout&amp;redirect_to=https%3A%2F%2Fwww.bugutv.vip&amp;_wpnonce=(.*?)',ret)[0]
 
             #发送推送 通知
             title = '布谷TV签到：获得'+str(int(k_num2)-int(k_num1))+'个积分'
